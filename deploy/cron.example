@@ -1,0 +1,4 @@
+# tg-thumb-fixer —— 每 5 分钟增量扫描一轮
+# 安装：crontab -e 后粘贴下面一行（路径按你的部署改）
+# 注意：state_file / log_file / lock_file 请用绝对路径（cron 的工作目录不是项目目录）
+*/5 * * * * /usr/bin/python3 /opt/tg-thumb-fixer/tg_thumb_fixer.py --config /opt/tg-thumb-fixer/config.json --backfill 60 >> /opt/tg-thumb-fixer/run.log 2>&1

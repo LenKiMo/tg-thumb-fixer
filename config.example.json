@@ -1,0 +1,21 @@
+{
+  "_comment": "复制为 config.json 使用。服务器部署建议把 state_file/log_file/lock_file 写成绝对路径 —— cron 的工作目录不是项目目录。",
+  "channels": [
+    "your_channel"
+  ],
+  "interval": 300,
+  "backfill": 60,
+  "photo_mode": "photo",
+  "multi_media": "album",
+  "incremental": true,
+  "video_mode": "video",
+  "skip_text_over_caption": true,
+  "official_links": true,
+  "official_domain": null,
+  "normalize_fixed_links": true,
+  "normalize_scope": "fixed",
+  "state_file": "state.json",
+  "log_file": "fixer.log",
+  "lock_file": "fixer.lock",
+  "alert_cmd": null
+}

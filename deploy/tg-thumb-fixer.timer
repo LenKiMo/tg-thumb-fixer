@@ -1,0 +1,12 @@
+[Unit]
+Description=每 5 分钟运行 tg-thumb-fixer
+
+[Timer]
+# 开机 2 分钟后开始，之后每 5 分钟一轮
+OnBootSec=2min
+OnUnitActiveSec=5min
+AccuracySec=30s
+Unit=tg-thumb-fixer.service
+
+[Install]
+WantedBy=timers.target

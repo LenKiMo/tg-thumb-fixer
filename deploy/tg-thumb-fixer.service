@@ -1,0 +1,21 @@
+[Unit]
+Description=tg-thumb-fixer（扫描一轮，修复缺失缩略图的帖文）
+Documentation=https://github.com/LenKiMo/tg-thumb-fixer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/tg-thumb-fixer
+ExecStart=/usr/bin/python3 /opt/tg-thumb-fixer/tg_thumb_fixer.py --config /opt/tg-thumb-fixer/config.json --backfill 60
+
+# 可选：以非 root 运行（目录属主也要相应调整）
+#User=tgfixer
+#Group=tgfixer
+
+# 简单加固
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/tg-thumb-fixer

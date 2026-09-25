@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: 语法检查与冒烟测试（Python ${{ matrix.python-version }}）
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: 隐私门禁（本机绝对路径痕迹）
+        run: python scripts/check_privacy.py
+
+      - name: 编译检查（零依赖，无需安装任何包）
+        run: python -m py_compile tg_thumb_fixer.py
+
+      - name: 冒烟：--help 可正常输出
+        run: python tg_thumb_fixer.py --help
+
+      - name: 校验示例配置可解析
+        run: |
+          python - <<'PY'
+          import importlib.util, sys
+          spec = importlib.util.spec_from_file_location("fixer", "tg_thumb_fixer.py")
+          m = importlib.util.module_from_spec(spec)
+          sys.modules["fixer"] = m          # dataclasses 需要模块已登记在 sys.modules
+          spec.loader.exec_module(m)
+
+          cfg = m.Config.load("config.example.json")
+          assert cfg.channels == ["your_channel"], cfg.channels
+          assert cfg.multi_media in ("album", "mosaic", "first"), cfg.multi_media
+          assert m.rewrite_links("https://vxtwitter.com/a/status/1", cfg) == "https://twitter.com/a/status/1"
+          print("config.example.json OK:", cfg.channels, cfg.multi_media, cfg.photo_mode)
+          PY

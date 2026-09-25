@@ -1,0 +1,21 @@
+[Unit]
+Description=tg-thumb-fixer（常驻轮询形态，替代 timer）
+Documentation=https://github.com/LenKiMo/tg-thumb-fixer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/tg-thumb-fixer
+ExecStart=/usr/bin/python3 /opt/tg-thumb-fixer/tg_thumb_fixer.py --config /opt/tg-thumb-fixer/config.json --watch
+Restart=always
+RestartSec=30
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/tg-thumb-fixer
+
+[Install]
+WantedBy=multi-user.target
